@@ -1,0 +1,110 @@
+枚举——基于逐个尝试答案的一种问题求解策略（不存在数学规律）
+
+eg.求小于N的最大素数
+
+public static void main(String[] args) {
+        //四重循环枚举a,b,c,d,a在最外层，d在最里层，每一层都是从小到打枚举
+        //通过缩小枚举范围提高枚举效率
+        //a的范围是[2,N]
+        //b的范围是[2,a-1]
+        int N;
+        Scanner scanner = new Scanner(System.in);
+        N = scanner.nextInt();
+        for (int a = 2;a <= N; ++a){
+            for (int b = 2;b < a;++b){
+                for (int c = b;c < a;++c){
+                    for (int d = c;d < a;++d){
+                        if (a*a*a == b*b*b + c*c*c + d*d*d){
+                            System.out.println("Cube="+a+", Triple="+b+","+c+","+d);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+eg2.生理周期：人有体力，情商，智商的高峰日子，他们分别每隔23天，28天和33天出现一次。对于每个人，我们想知道何时三个高峰落在同一天。给定三个高峰出现的日子p，e和i（不一定是第一个高峰出现的日子），再给定另一个指定的日子d，你的任务是输出日子d之后，下一次三个高峰落在同一天的日子（用距离d的天数表示），例如：给定日子为10，下次出现三个高峰同一天的日子是12，则输出为2。
+//		  从d+1天开始，一直试到第21252天，对其中每个日期k，看是否满足
+//        判断是否满足 (k - p)%23 == 0 && (k - e)%28 == 0 && (k - i)%33 == 0;
+//        枚举时应尽量减少枚举次数，首先寻找第一个体力高峰，然后寻找体力高峰时的情商高峰
+        int p,e,i,d,caseNo = 0;
+        Scanner scanner = new Scanner(System.in);
+        p = scanner.nextInt();
+        d = scanner.nextInt();
+        e = scanner.nextInt();
+        i = scanner.nextInt();
+        while(p != -1){
+            ++caseNo;
+            int k;
+            for (k = d + 1; (k - p)%23!=0;k++){
+                for (;(k - e)%28!=0;k+=23){
+                    for (;(k - i)%33!=0;k+=23*28){
+                        int b = k-d;
+                        if (b <= 21512) {
+                            System.out.println("case" + caseNo + ": the next triple peak occurs in " + b);
+                        }else{
+                            return ;
+                        }
+                    }
+                }
+            }
+        }
+        return;
+    }
+
+eg3：有十二枚硬币，其中有11枚真币和1枚假币。真币和假币重量不同，但不知道假币是比真币轻还是重。现在，用一架天平称了这些币三次，告诉你称的结果，请你找出假币并且确定假币是轻还是重（数据保证一定能找出来）
+思路：对于每一枚硬币先假设它是轻的，看这样是否符合称量结果。如果符合，问题即解决。如不符合，就假设它是重的，看是否符合称量结果。吧所有硬币都试一遍，一定能找到特殊硬币
+char Left [3][7];
+char Right [3][7];
+char result [3][7];
+bool IsFake( char c,bool light);
+bool IsFake( char c,bool light){
+    //light为真表示假设假币为轻，否则表示假设假币为重
+    for (int i = 0;i < 3;i++){
+        char * pLeft,* pRight;//指向天平两边的字符串
+        if (light){
+            pLeft = Left[i];
+            pRight = Right[i];
+        } else{//如果假设假币是重的，则把称量结果左右对换
+            pLeft = Right[i];
+            pRight = Left[i];
+        }
+        switch (result[i][0]) {
+            case 'u':
+                if(strchr(pRight,c) == NULL){
+                    return false;
+                }
+                break;
+            case 'e':
+                if(strchr(pLeft,c) || strchr(pRight,c)){
+                    return false;
+                }
+                break;
+            case 'd':
+                if (strchr(pLeft,c) == NULL){
+                    return false;
+                }
+                break;
+        }
+    }
+    return true;
+}
+int main(){
+    int t;
+    cin >> t;
+    while (t--){
+        for (int i = 0; i < 3; ++i) {
+            cin>>Left[i]>>Right[i]>>result[i];
+            for (char c = 'A';c <= 'L';c++) {
+                if(IsFake(c,true)){
+                    cout<<c<<" is the counterfeit coin and it is light.\n";
+                    break;
+                } else if(IsFake(c,false)){
+                    cout<< c<<" is the counterfeit coin and it is heavy.\n";
+                    break;
+                }
+            }
+        }
+    }
+    return 0;
+}
