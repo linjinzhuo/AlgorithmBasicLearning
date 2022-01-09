@@ -1,0 +1,80 @@
+#include <iostream>
+#include <memory>
+#include <cstring>
+#include <iostream>
+using namespace std;
+//第一种思想：枚举所有可能的按钮（开关）状态，对每个状态计算一下最后灯的情况，看是否都熄灭
+//--每个按钮有两种状态（按下或不按下）
+//一共有30个开关，那么状态数为2^30，太多超时
+//如果存在某个局部，一旦这个局部状态被确定，那么剩余其他部分的状态只能是确定的一种，
+//或者不多的n钟，那么就只需要枚举这个局部的状态即可
+//减少空间开销可以采用一维char类型数组进行存储灯的状态
+
+char orLights[5];
+char lights[5];
+char result[5];
+
+int GetBit(char c,int i){
+    return (c >> i) & i;
+}
+void SetBit(char &c,int i,int v){
+    if(v){
+        c |= (1<<i);
+    } else{
+        c &= ~(1 << i);
+    }
+}
+void FlipBit(char &c,int i){
+    c ^= (1 << i);
+}
+void OutputResult(int t,char result[]){
+    cout <<"PUZZLE #"<<t<<endl;
+    for (int i = 0; i < 5; ++i) {
+        for (int j = 0; j < 6; ++j) {
+            cout<<GetBit(result[i],j);
+            if(j < 5)
+                cout << "";
+        }
+    }
+}
+int main() {
+    int T;
+    cin >> T;
+    for (int t = 0; t <= T; ++t) {
+        for (int i = 0; i < 5; ++i) {
+            for (int j = 0; j < 6; ++j) {
+                int s;
+                cin >> s;
+                SetBit(orLights[i],j,s);
+            }
+        }
+        for (int n = 0; n < 64; ++n) {
+            //每个n代表第一行的状态
+            int  switchs = n;
+            memcpy(lights,orLights,sizeof(orLights));
+            for (int i = 0; i < 5; ++i) {
+                result[i] = switchs;
+                for (int j = 0; j < 6; ++j) {
+                    if(GetBit(switchs,j)){
+                        if (j > 0)
+                            FlipBit(lights[i],j);
+                        FlipBit(lights[i],j);
+                        if(j < 5){
+                            FlipBit(lights[i],j+1);
+                        }
+                    }
+                    if(i < 4){
+                        lights[i+1] ^= switchs;
+                    }
+                    //确定第i+1行灯的状态
+                    switchs = lights[i];
+                }
+                if(lights[4] == 0){
+                    OutputResult(t,result);
+                    break;
+                }
+            }
+        }
+    }
+    return 0;
+}
