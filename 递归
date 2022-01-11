@@ -11,3 +11,10 @@ int Factorial(int n){
   1.替代多重循环
   2.解决本来就是递归形式定义的问题
   3.将问题分解成规模更小的问题规模
+
+
+void Hanoi(int n, char src, char mid, char dest){
+  if(n == 1){
+    cout << src << "->" << dest << endl;
+  }
+}
