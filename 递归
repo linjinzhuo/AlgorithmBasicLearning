@@ -26,3 +26,39 @@ void Hanoi(int n, char src, char mid, char dest){
   Hanoi(n - 1,mid,src,dest);//最后将n-1个盘子从mid移动到dest；
   return;
 }
+
+
+用递归代替多重循环
+n皇后问题：输入整数n，要求n个国际象棋的皇后，摆在n*n的棋盘上，互相不能攻击，输出全部方案（上下左右以及斜对角不能有皇后）
+输出：每行代表一种摆法，第i个数字表示第i行其大小表示第几列
+int queenPosion[100];//用来存放算好的皇后位置，左上角为（0，0）
+void NQueen(int k);
+int main(){
+  cin >> N;
+  NQueen(0);//从第0行开摆；
+  return 0；
+}
+
+void NQueen(int k){
+  int i;
+  if(k == N){
+    for(){
+      cout << queenPos[i] + 1 << " ";
+      cout << endl;
+      return ;
+    }
+  }
+  for(i = 0;i < N;i ++){//逐步尝试第k个皇后的位置
+    int j;
+    for(j = 0;j < k;j ++){
+      //和已经摆好的k个皇后位置进行比较，是否冲突
+      if(queenPos[j] == i || abs(queenPos[j] -i) == abs(k-j)){
+        break;//冲突，测试下个位置
+      }
+    }
+  if(j == k){//当前选的位置i不冲突
+      queenPos[k] = i;//将第k个皇后摆放在位置i
+      NQueen(k+1);
+    }
+  }
+}
