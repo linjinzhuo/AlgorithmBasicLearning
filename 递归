@@ -62,3 +62,25 @@ void NQueen(int k){
     }
   }
 }
+
+
+用递归解决递归形式的问题
+eg.逆波兰表达式
+逆波兰表达式是一种把运算符前置的算术表达式，例如普通的表达式2+3的逆波兰表示法为+ 2 3.逆波兰表达式的优点是运算符之间不必有优先级关系，也不必用括号改变运算次序，例如(2+3)*4的逆波兰表示法为* + 2 3 4。本题求解逆波兰表达式的值，其中运算符包括+ — * /四个。
+double exp(){
+	//读入一个逆波兰表达式
+	char s[20];
+	cin >> s;
+	switch(s[0]){
+		case '+': return exp()+exp();
+		case '-': return exp()-exp();
+		case '*': return exp()*exp();
+		case '/': return exp()/exp();
+		default: return atof(s);
+		break;
+	}
+}
+int main(){
+	printf("%lf",exp());
+	return 0;
+}
