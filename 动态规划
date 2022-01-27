@@ -1,0 +1,48 @@
+例题1.数字三角形
+		7
+	  3   8
+	8   1   0
+  2   7   4   4
+4   5   2   6   5
+在上面的数字三角形中寻找一条从顶部岛底边的路径，使得路径上所经过的数字之和最大。路径上的每一步都只能往左下或者右下走。只需要求出这个最大和即可，无需给出具体路径，三角形的行数大于1小于等于100，数字为0-99
+
+用二维数组存放数字三角形
+D(r,j):第r行第j个数字(r,j从1开始算)
+MaxSum(r,j):c从D(r,j)到底边的各条路径中，最佳路径的数字之和。
+求MaxSum(1,1)
+
+典型的递归问题
+时间复杂度巨大达到2^n!!!
+
+改进：如果每算出一个MaxSum(r,j)就保存起来，下次用到其值的时候直接取用，则可以免去重复计算。那么可以用o(n^2)时间完成计算。因为三角形的数字总数是n(n+1)/2
+#include <iostream>
+#include <algorithm>
+#define MAX 101
+using namespace std;
+int D[MAX][MAX];
+int maxsum[MAX][MAX];
+int n;
+int MaxSum(int i,int j){
+	if(maxsum[i][j] != -1){//ij到底边最大和被算出来过
+		rerturn maxsum[i][j];
+	}
+	if(i == n){
+		return D[i][j];
+	}else{
+		int x = MaxSum(i+1,j);
+		int y = MaxSum(i+1,j+1);
+		maxum[i][j] = max(x,y) + D[i][j];
+	}
+	return maxsum[i][j];
+}
+int main(){
+	int i,j;
+	cin>>n;
+	for(i = 1;i <= n;i++){
+		for(j = 1;j <= i;j++){
+			cin>>D[i][j];
+			masSum[i][j] = -1;//初始化为-1意为到这个点的值还没有被算出来过
+		}
+	}
+	cout << MaxSum(1,1) << endl;
+}
