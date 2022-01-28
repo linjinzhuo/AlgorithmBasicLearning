@@ -46,3 +46,37 @@ int main(){
 	}
 	cout << MaxSum(1,1) << endl;
 }
+
+
+递归转成递推
+由下往上
+		30
+	  23  21
+	20  13  10
+  7   12  10  10
+4   5   2   6    5       
+#define MAX 101
+int D[MAX][MAX];
+int n; 
+int maxsum[MAX][MAX];
+int main(){
+	int i,j;
+	cin>>n;
+	for(i = 1;i <= n;i++){
+		for(j = 1;j <= i;j++){
+			cin>>D[i][j];
+		}
+	}
+	for(int i = 1;i <= n;++i){
+		maxsum[n][i] = D[n][i];
+	}
+	for(int i = n-1;i >= 1;i--){
+		for(int j = 1;j <= i;++j){
+			maxsum[i][j] = max(maxsum[i+1][j],maxsum[i+1][j+1] + D[i][j]);
+		}
+	}
+	cout << maxsum[1][1] << endl;
+}
+
+空间优化：
+进一步考虑，连maxsum数组都可以不要，直接用D的第n行代替maxsum即可
