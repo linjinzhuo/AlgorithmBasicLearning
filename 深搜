@@ -1,0 +1,48 @@
+城堡问题：
+编写一个程序，计算城堡一共有多少房间，最大的房间有多大。城堡被分割成m*n(m,n<=50),每个方块可以有0~4面墙。
+
+解题思路：
+把方块看作是节点，相邻的两个方块之间如果没有墙，则在方块之间连一条边，这样城堡就能转换成一个图。
+
+求房间的个数，实际上就是在求图中有多少个极大连通子图
+
+一个连通子图，往里头加任何一个图里的其他点，就会变得不连通，那么这个连通子图就是极大连通子图。
+
+对每一个房间，深搜，从而给这个房间能够到达的所有位置染色。最后统计一共用了几种颜色，以及每种颜色的数量。
+
+intR,C;//行列数
+int rooms[60][60];
+int color[60][60];//方块是否染色过
+int maxRoomArea = 0,roomNUm = 0;
+int roomAera;
+void Dfs(int i,int k){
+	if(color[i][k])
+		return;
+	++ roomArea;
+	color [i][k] = roomNum;
+	if((rooms[i][k] & 1) == 0) Dfs(i,k-1);//向西走
+	if((rooms[i][k] & 2) == 0) Dfs(i-1,k);//向北
+	if((rooms[i][k] & 4) == 0) Dfs(i,k+1);//向东
+	if((rooms[i][k] & 8) == 0) Dfs(i+1,k);//向南
+}
+int main(){
+	cin >> R >> C;
+	for(int i = 1;i <= R;++i){
+		for(int k = 1;k <= c;++k){
+			cin >> rooms[i][k];
+		}
+	}
+	memset(color,0,sizeof(color));
+	for(int i = 1;i <= R;++i){
+		for(int k = 1;k <= c;++k){
+			if(!color[i][k]){
+				++roomNum;
+				roomArea = 0;
+				Dfs(i,k);
+				maxRoomArea = max(roomArea,maxRoomArea);
+			}
+		}
+	}
+	cout << roomNum << endl;
+	cout << maxRoomArea << endl;
+}
