@@ -1,0 +1,43 @@
+农夫知道一头牛的位置，想要抓住它。农夫和牛都位于数轴上，农夫起始位于点N(O<=N<=100000)，牛位于点K(o<=K<=1ooooo)。农夫有两种移动方式:
+1、从X移动到X-1或X+1，每次移动花费一分钟
+2、从X移动到2*X，每次移动花费一分钟。
+假设牛没有意识到农夫的行动，站在原地不动。农夫最少要花多少时间才能抓住牛?
+
+
+假设农夫起始位于点3，牛位于5，N=3，K=5，最右边是6.如何搜索到一跳走到5的路径？
+int N,K;
+const int MAXN = 100000;
+int N,K;
+const int MAXN = 100000;
+int visited[MAXN+10];//判重标记,visited[i]= true表示i已经扩展过
+struct Step{
+	int x;//位置
+	int steps;//到达x所需的步数Step(int xx,int s):x(xx),steps(s){}
+};
+queue<Step> q;//队列,即Open表
+int main() i
+	cin >>N>>K;
+	memset(visited,0,sizeof(visited));q.push(Step(N,0));
+	visitedINI=1:
+	while(!q.empty)){
+		Step s= q.front();
+		if( s.x == K){//找到目标
+			cout << s.steps <<endl;
+			return 0;
+		}
+		else {
+			if( s.x- 1 >= 0 && !visited[s.x-1]){
+				q.push(Step(s.x-1,s.steps+1));visited[s.x-1]= 1;
+			}
+			if(s.x+ 1<= MAXN && !visited[s.x+1]){
+				q.push(Step(s.x+1,s.steps+1));visited[s.x+1]=1;
+			}
+			if( s.x* 2)<= MAXN &&!visited[s.x*2] ){
+				q.push(Step(s.x*2,s.steps+1));visited[s.x*2]=1;
+			}
+			q.pop();
+		}
+	}
+	return 0;
+}
+
