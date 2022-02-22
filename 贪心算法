@@ -34,3 +34,69 @@ eg.电影节
 因为E(ai)<= E(bi)且E(bi)<= S(bi+1)则:E(ai)<= S(bi+1)
 则：E(ai) <= S(bi+1)
 ai+1是所有S(x)>=E(ai)的x中，E(x)最小的S(bi+1)>=E(bi)>=E(ai)，所以E(bi+1)>= E(ai+1)因此用ai+1替换bi+1不会对后续造成影响，替换可行
+
+eg.奶牛挤奶
+有n头牛( 1<=n<=50,000)要挤奶。给定每头牛挤奶的时间区间[A,B] (1<=A<=B<=1,000,000，A,B为整数)。牛需要呆畜栏里才能挤奶。一个畜栏同一时间只能容纳一头牛。问至少需要多少个畜栏，才能完成全部挤奶工作，以及每头牛都放哪个畜栏里( Special judged)去同一个畜栏的两头牛，它们挤奶时间区间哪怕只在端点重合也是不可以的。
+
+贪心解法︰
+所有奶牛都必须挤奶。到了一个奶牛的挤奶开始时间，就必须为这个奶牛找畜栏。因此按照奶牛的开始时间逐个处理它们，是必然的。
+S(x)表示奶牛x的开始时间。E(x)表示x的结束时间。对E(x),x可以是奶牛，也可以是畜栏。畜栏的结束时间，就是正在其里面挤奶的奶牛的结束时间。同一个畜栏的结束时间是不断在变的。
+
+1)把所有奶牛按开始时间从小到大排序。
+2)为第一头奶牛分配一个畜栏。
+3)依次处理后面每头奶牛i。处理i时，考虑已分配畜栏中，结束时间最早的畜栏x。
+若E(x)< S(i)，则不用分配新畜栏，i可进入x,并修改E(x)为E(i)若E(x) >= S(i)，则分配新畜栏y,记 E(y) = E(i)
+直到所有奶牛处理结束
+需要用优先队列存放已经分配的畜栏，并使得结束时间最早的畜栏始终位于队列头部。
+
+using namespace std;
+struct cow {
+	int a ,b; //挤奶区间起终点
+	int No ; //编号
+	bool operator<(const cow & c) const {
+		return a < c.a ;
+}
+cows [50100];
+int pos[50100] ; //pos [i]表示编号为i的奶牛去的畜栏编号
+struct stall{
+struct stall{
+	int end;//结束时间
+	int No;//编号
+	bool operator<(const stall &s)const
+		return end > s. end;
+	}
+	stal1 (int e ,int n) : end (e) ,No (n) { }
+};
+int main (){
+	int n ;
+	scanf ("8d" , &n) ;
+	for(int i = 0 ;i < n ; ++i){
+		scanf ( "%d%d" , &cows [i].a , &cows[i].b)
+		cows[i].No = i;
+	}
+	sort (cows , cows+n);
+	int total =0 ;
+	priority_queue<stall> pq;
+	for (int i = 0;i <n; ++i){
+		if(pq. empty () ) {
+			++total;
+			pq.push (stall (cows[i].b,total));pos [cows [i].No]= total;
+		}
+		else {
+				stall st = pq.top () ;
+				if( st.end < cows[i].a ) { //端点也不能重合
+				pq.pop () ;
+				pos[cows [i].No]= st.No ;
+				pq.push (stall (cows [i].b,st.No) ) ;
+				}
+		else { //对应if( st.end < cows [i].a)
+			++total;
+			pq.push (stall{ cows[i].b,total} );
+			pos [cows[i].No]= total ;
+			}
+		}
+	}
+	printf("%d\n" ,total) ;for(int i = 0;i <n ;++i)
+	printf ( "8d\n" ,pos[i] );
+	return 0 ;
+}
